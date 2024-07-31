@@ -9,9 +9,9 @@ namespace MyOpenTK
     {
         static void Main(string[] args)
         {
-            using (Game game = new Game(800, 600, "LearnOpenTK"))
+            using (Lesson1 lesson1 = new Lesson1(800, 600, "LearnOpenTK"))
             {
-                game.Run();
+                lesson1.Run();
             }
         }
     }

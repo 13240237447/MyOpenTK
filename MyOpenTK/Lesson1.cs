@@ -1,20 +1,16 @@
-using System;
 using System.Diagnostics;
-using System.IO;
 using OpenTK.Graphics.OpenGL.Compatibility;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using StbImageSharp;
 
 
 namespace MyOpenTK
 {
-    public class Game : GameWindow
+    public class Lesson1 : GameWindow
     {
-        public Game(int width, int height, string title) :
+        public Lesson1(int width, int height, string title) :
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) { }
-
         private int VertexBufferObject { set; get; }
         
         private int VertexArrayObject { set; get; }
@@ -26,8 +22,6 @@ namespace MyOpenTK
         private Texture texture;
 
         private Texture texture2;
-
-        private Stopwatch stopwatch;
         
         float[] vertices = {
             -0.5f, -0.5f, 0.0f, 0,0, //BL
@@ -59,24 +53,23 @@ namespace MyOpenTK
             // GL.Enable(EnableCap.Blend);
             // GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-         
+            shader = new Shader("shader.vert", "shader.frag");
+            shader.Use();
+            
             VertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(VertexArrayObject);
             
             VertexBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
             GL.BufferData(BufferTarget.ArrayBuffer, vertices,BufferUsage.StaticDraw);
-
-            ElementBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer,ElementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer,indices,BufferUsage.StaticDraw);
-        
-            shader = new Shader("shader.vert", "shader.frag");
-            shader.Use();
-
+            
             var positionLocation = shader.GetAttribLocation("aPosition");
             GL.EnableVertexAttribArray(positionLocation);
             GL.VertexAttribPointer(positionLocation,3,VertexAttribPointerType.Float,false,5 * sizeof(float),0);
+    
+            ElementBufferObject = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer,ElementBufferObject);
+            GL.BufferData(BufferTarget.ElementArrayBuffer,indices,BufferUsage.StaticDraw);
 
             var texCoordLocation = shader.GetAttribLocation("aTexCoord");
             GL.EnableVertexAttribArray(texCoordLocation);
@@ -91,7 +84,6 @@ namespace MyOpenTK
             shader.SetInt("texture0",0);
             shader.SetInt("texture1",1);
             
-            stopwatch = Stopwatch.StartNew();
         }
         
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e)
@@ -116,7 +108,7 @@ namespace MyOpenTK
             // GL.DrawArrays(PrimitiveType.Triangles,0,3);
             
             GL.DrawElements(PrimitiveType.Triangles,indices.Length,DrawElementsType.UnsignedInt,0);
-            
+
             SwapBuffers();
           
         }

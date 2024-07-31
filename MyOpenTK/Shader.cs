@@ -66,11 +66,11 @@ namespace MyOpenTK
             for (var i = 0; i < numberOfUniforms; i++)
             {
                 // get the name of this uniform,
-                int buffSize = 10;
-                int lenght = 0;
+                int buffSize = 128;
+                int length = 0;
                 int size = 0;
                 UniformType uniformType = UniformType.Int;
-                var key = GL.GetActiveUniform(Handle, (uint)i,buffSize, ref lenght, ref size,ref uniformType);
+                var key = GL.GetActiveUniform(Handle, (uint)i,buffSize, ref length, ref size,ref uniformType);
 
                 // get the location,
                 var location = GL.GetUniformLocation(Handle, key);
